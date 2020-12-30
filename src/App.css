@@ -1,38 +1,56 @@
-.App {
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 150%;
+}
+td {
+  text-align: left;
+  padding: 0px;
+  line-height: 0.5rem;
+  border: 1px solid #d2d3ce;
+}
+th {
+  border: 1px solid #d2d3ce;
+  background-color: #eff1e3;
   text-align: center;
+  padding: 8px;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+[contenteditable] {
+  outline: 0px solid transparent;
+  text-align: left;
+  margin: 0px;
+  cursor: default;
+  line-height: 100%;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* .workArea {
+  border: 1px solid #dddddd;
+} */
+.workAreaSelected {
+  border: 3px solid #1d6f42;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#colHeader {
+  text-align: center;
+  width: 0.4rem;
+  font-size: smaller;
+  background-color: #eff1e3;
+  padding: 8px;
+  cursor: pointer;
 }
-
-.App-link {
-  color: #61dafb;
+#rowHeader {
+  width: 10rem;
+  font-weight: normal;
+  padding: 8px;
+  line-height: 0.5rem;
+  cursor: pointer;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.selectedRowHeader {
+  border-bottom-color: #1d6f42;
+  border-bottom-width: 2px;
+  color: #1d6f42;
+}
+.selectedColHeader {
+  border-right-color: #1d6f42;
+  border-right-width: 2px;
+  color: #1d6f42;
 }
