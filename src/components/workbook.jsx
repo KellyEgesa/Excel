@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+
 class WorkBook extends Component {
   state = { selectedCell: "" };
+
   highlightCell(cell) {
     this.setState({ selectedCell: cell });
   }
+
   highlightRowHeader(array, index) {
     if (array.length < 3) {
       return array[1] == index ? "selectedColHeader" : null;
@@ -15,13 +18,14 @@ class WorkBook extends Component {
       return parseInt(number) == index ? "selectedColHeader" : null;
     }
   }
+
   render() {
     let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let colHeader = [];
     const rowHeader = alphabet.split("");
     const { selectedCell } = this.state;
     const selected = selectedCell.split("");
-    console.log(selected);
+
     for (let index = 0; index < 200; index++) {
       colHeader.push(
         <tr key={index}>
@@ -50,6 +54,7 @@ class WorkBook extends Component {
         </tr>
       );
     }
+
     return (
       <div>
         <table>

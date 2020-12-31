@@ -23,9 +23,6 @@ th {
   cursor: default;
   line-height: 100%;
 }
-/* .workArea {
-  border: 1px solid #dddddd;
-} */
 .workAreaSelected {
   border: 3px solid #1d6f42;
 }
@@ -47,10 +44,12 @@ th {
 .selectedRowHeader {
   border-bottom-color: #1d6f42;
   border-bottom-width: 2px;
+  background-color: #bfbfbf;
   color: #1d6f42;
 }
 .selectedColHeader {
   border-right-color: #1d6f42;
   border-right-width: 2px;
+  background-color: #bfbfbf;
   color: #1d6f42;
 }
