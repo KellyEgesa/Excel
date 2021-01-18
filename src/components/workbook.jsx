@@ -1,20 +1,58 @@
 import React, { Component } from "react";
-var XLSX = require("xlsx");
+import ContextMenu from "./contextMenu";
 
 let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const alphabetSplit = alphabet.split("");
 class WorkBook extends Component {
   state = {
+    showMenu: false,
     selectedCell: "",
     col: [],
     sheet: { 0: [""] },
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    document
+      .querySelector("td[contenteditable]")
+      .addEventListener("paste", this.pasteDefaultStop);
+    document.addEventListener("contextmenu", this.handleContextMenu);
+    document.addEventListener("click", this.handleClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("click", this.handleClick);
+    document.removeEventListener("contextmenu", this.handleContextMenu);
+  }
+
+  handleContextMenu = (e) => {
+    e.preventDefault();
+
+    this.setState({
+      xPos: `${e.pageX}px`,
+      yPos: `${e.pageY}px`,
+      showMenu: true,
+    });
+  };
+
+  handleClick = (e) => {
+    if (this.state.showMenu) this.setState({ showMenu: false });
+  };
+
+  pasteDefaultStop = (e) => {
+    e.preventDefault();
+    var text = e.clipboardData.getData("text/plain");
+    document.execCommand("insertHTML", false, text);
+  };
 
   highlightCell(cell) {
     this.setState({ selectedCell: cell });
   }
+
+  stopRightClickSelect = (e) => {
+    if (e.nativeEvent.which === 3) {
+      e.nativeEvent.preventDefault();
+    }
+  };
 
   highlightRowHeader(array, index) {
     if (array.length < 3) {
@@ -30,21 +68,27 @@ class WorkBook extends Component {
 
   onKeyPressed(event) {
     const { sheet } = this.state;
-    let value = document.getElementById(event).innerHTML;
+    let value = document.getElementById(event).innerHTML.trim();
     const cell = event.split("");
     let tempArray = [];
-    let row = cell[1];
+    let row = cell[0];
     let rowNumber = alphabetSplit.indexOf(row);
     let column;
 
-    if (cell.length < 4) {
-      column = cell[2];
+    if (cell.length < 3) {
+      column = cell[1];
     } else {
       let number = "";
-      for (let i = 2; i < cell.length; i++) {
+      for (let i = 1; i < cell.length; i++) {
         number += cell[i];
       }
       column = parseInt(number);
+    }
+
+    if (value.split("")[0] === "=") {
+      var res = value.substr(1);
+      var multiply = new Function("x", "y", "return x * y");
+      console.log(res);
     }
 
     if (sheet[column] == null) {
@@ -82,7 +126,9 @@ class WorkBook extends Component {
     const { selectedCell } = this.state;
     const selected = selectedCell.split("");
 
-    for (let index = 0; index < 200; index++) {
+    const { showMenu, xPos, yPos } = this.state;
+
+    for (let index = 1; index < 200; index++) {
       colHeader.push(
         <tr key={index}>
           <td
@@ -96,19 +142,16 @@ class WorkBook extends Component {
               <td
                 key={item}
                 id={`${item}${index}`}
-                onClick={() => this.highlightCell(`${item}${index}`)}
                 className={
                   selectedCell === `${item}${index}`
                     ? "workAreaSelected"
                     : "workArea"
                 }
-              >
-                <p
-                  contentEditable="true"
-                  id={`P${item}${index}`}
-                  onBlur={() => this.onKeyPressed(`P${item}${index}`)}
-                ></p>
-              </td>
+                contentEditable="true"
+                onClick={() => this.highlightCell(`${item}${index}`)}
+                onBlur={() => this.onKeyPressed(`${item}${index}`)}
+                onMouseDown={this.stopRightClickSelect}
+              ></td>
             );
           })}
         </tr>
@@ -117,6 +160,12 @@ class WorkBook extends Component {
 
     return (
       <div>
+        <ContextMenu
+          showMenu={showMenu}
+          xPos={xPos}
+          yPos={yPos}
+          onSave={() => this.save()}
+        ></ContextMenu>
         <button onClick={() => this.save()}>Save</button>
         <table>
           <thead>

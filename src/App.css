@@ -53,3 +53,7 @@ th {
   background-color: #bfbfbf;
   color: #1d6f42;
 }
+.list-group-item:hover {
+  background-color: #1d6f42;
+  color: white;
+}
