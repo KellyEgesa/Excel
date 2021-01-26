@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ContextMenu from "./contextMenu";
+import axios from "axios";
 
 let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const alphabetSplit = alphabet.split("");
@@ -9,6 +10,7 @@ class WorkBook extends Component {
     selectedCell: "",
     col: [],
     sheet: { 0: [""] },
+    selectedFile: null,
   };
 
   componentDidMount() {
@@ -114,12 +116,22 @@ class WorkBook extends Component {
     }
   }
 
+  onChangeHandler = (event) => {
+    this.setState({ selectedFile: event.target.files[0] });
+    const data = new FormData();
+    data.append("file", event.target.files[0]);
+    axios.post("http://localhost:3030/file", data, {}).then((res) => {
+      console.log(res.statusText);
+    });
+  };
+
   save() {
     const { sheet } = this.state;
     let data = Object.values(sheet);
     console.log(data);
   }
 
+  upload() {}
   render() {
     let colHeader = [];
     const alphabetSplit = alphabet.split("");
@@ -167,6 +179,10 @@ class WorkBook extends Component {
           onSave={() => this.save()}
         ></ContextMenu>
         <button onClick={() => this.save()}>Save</button>
+        <label for="file-upload" className="custom-file-upload">
+          <input type="file" id="file-upload" onChange={this.onChangeHandler} />
+          Upload
+        </label>
         <table>
           <thead>
             <tr>
