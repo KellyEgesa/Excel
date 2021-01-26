@@ -56,6 +56,18 @@ class WorkBook extends Component {
     }
   };
 
+  convertJsonToFile(SheetValues) {
+    let length = Object.keys(SheetValues).length;
+    for (let index = 0; index < length; index++) {
+      let row = SheetValues[index];
+      for (let f = 0; f < row.length; f++) {
+        let id = alphabetSplit[f] + (index + 1);
+        console.log(id);
+        document.getElementById(id).innerHTML = SheetValues[index][f];
+      }
+    }
+  }
+
   highlightRowHeader(array, index) {
     if (array.length < 3) {
       return array[1] == index ? "selectedColHeader" : null;
@@ -78,13 +90,15 @@ class WorkBook extends Component {
     let column;
 
     if (cell.length < 3) {
-      column = cell[1];
+      column = parseInt(cell[1]);
+      column -= 1;
     } else {
       let number = "";
       for (let i = 1; i < cell.length; i++) {
         number += cell[i];
       }
       column = parseInt(number);
+      column = column -= 1;
     }
 
     if (value.split("")[0] === "=") {
@@ -128,7 +142,7 @@ class WorkBook extends Component {
   save() {
     const { sheet } = this.state;
     let data = Object.values(sheet);
-    console.log(data);
+    this.convertJsonToFile(sheet);
   }
 
   upload() {}
@@ -179,7 +193,7 @@ class WorkBook extends Component {
           onSave={() => this.save()}
         ></ContextMenu>
         <button onClick={() => this.save()}>Save</button>
-        <label for="file-upload" className="custom-file-upload">
+        <label htmlFor="file-upload" className="custom-file-upload">
           <input type="file" id="file-upload" onChange={this.onChangeHandler} />
           Upload
         </label>
