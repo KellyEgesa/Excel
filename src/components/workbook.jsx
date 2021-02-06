@@ -206,47 +206,70 @@ class WorkBook extends Component {
     }
 
     return (
-      <div>
+      <div className="mainDiv">
         <ContextMenu
           showMenu={showMenu}
           xPos={xPos}
           yPos={yPos}
           onSave={() => this.save()}
         ></ContextMenu>
-        <button onClick={() => this.save()}>Save</button>
-        <label htmlFor="file-upload" className="custom-file-upload">
-          <input type="file" id="file-upload" onChange={this.onChangeHandler} />
-          Upload
-        </label>
-        <table>
-          {selectedCol ? (
-            <colgroup>
-              <col span={alphabetSplit.indexOf(selectedCol) + 1} />
-              <col style={{ border: "3px solid#1d6f42" }}></col>{" "}
-            </colgroup>
-          ) : null}
+        <div className="d-flex justify-content-end" id="buttonsMain">
+          <div className="my-auto">
+            <button
+              className="btn btn-success"
+              id="saveButton"
+              onClick={() => this.save()}
+            >
+              Save <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div className="my-auto m-2">
+            <div id="borderUpload">
+              <label
+                htmlFor="file-upload"
+                className="custom-file-upload btn btn-sm m-0"
+              >
+                <input
+                  type="file"
+                  id="file-upload"
+                  onChange={this.onChangeHandler}
+                />
+                Upload <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className="mainSheet">
+          <table>
+            {selectedCol ? (
+              <colgroup>
+                <col span={alphabetSplit.indexOf(selectedCol) + 1} />
+                <col style={{ border: "3px solid#1d6f42" }}></col>{" "}
+              </colgroup>
+            ) : null}
 
-          <thead>
-            <tr>
-              <th></th>
-              {alphabetSplit.map((item) => {
-                return (
-                  <th
-                    className={
-                      selected[0] === item ? "selectedRowHeader" : null
-                    }
-                    key={item}
-                    id="rowHeader"
-                    onClick={() => this.clickCol(item)}
-                  >
-                    {item}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>{colHeader}</tbody>
-        </table>
+            <thead>
+              <tr>
+                <th></th>
+                {alphabetSplit.map((item) => {
+                  return (
+                    <th
+                      className={
+                        selected[0] === item ? "selectedRowHeader" : null
+                      }
+                      key={item}
+                      id="rowHeader"
+                      onClick={() => this.clickCol(item)}
+                    >
+                      {item}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>{colHeader}</tbody>
+          </table>
+        </div>
       </div>
     );
   }

@@ -1,20 +1,37 @@
+.mainDiv {
+  overflow-x: hidden;
+}
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.mainSheet {
+  height: 86vh;
+  /* overflow-x: auto; */
+  overflow-y: scroll;
+}
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   border-spacing: 0;
-  width: 150%;
+  width: max-content;
+  /* width: max-content; */
+  /* height: max-content; */
 }
 td {
   text-align: left;
   padding: 0px;
   line-height: 0.5rem;
   border: 1px solid #d2d3ce;
+  width: 100px;
 }
 th {
   border: 1px solid #d2d3ce;
   background-color: #eff1e3;
   text-align: center;
   padding: 8px;
+  width: 10px;
 }
 [contenteditable] {
   outline: 0px solid transparent;
@@ -61,11 +78,28 @@ input[type="file"] {
   display: none;
 }
 .custom-file-upload {
-  border: 1px solid #ccc;
-  display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+  outline: 3px black;
+  color: #1d6f42;
 }
+.custom-file-upload:hover {
+  background-color: #1d6f42;
+  color: white;
+}
+
 .selectedRow {
   border: 3px solid#1d6f42;
+}
+#saveButton {
+  background-color: #1d6f42;
+}
+#borderUpload {
+  border: 1px solid #1d6f42;
+  border-radius: 5.7px;
+}
+#buttonsMain {
+  padding: 2px;
+  background-color: #eff1e3;
+  height: 7vh;
 }

@@ -20,11 +20,19 @@ const ContextMenu = (props) => {
                 opacity: interpolatedStyle.opacity,
               }}
             >
-              <ul className="list-group" style={{ backgroundColor: "blue" }}>
+              <ul
+                className="list-group"
+                style={{ backgroundColor: "blue", cursor: "pointer" }}
+              >
                 <li className="list-group-item" onClick={onSave}>
-                  Save
+                  Save <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </li>
-                <li className="list-group-item">Add a contributor</li>
+                <li className="list-group-item">
+                  Open <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                </li>
+                <li className="list-group-item">
+                  Add contributor <i class="fa fa-users" aria-hidden="true"></i>
+                </li>
               </ul>
             </div>
           ) : (

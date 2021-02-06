@@ -1,9 +1,15 @@
 import logo from "./logo.svg";
 import "./App.css";
 import WorkBook from "./components/workbook";
+import Header from "./components/Header";
 
 function App() {
-  return <WorkBook></WorkBook>;
+  return (
+    <div>
+      <Header></Header>
+      <WorkBook></WorkBook>
+    </div>
+  );
 }
 
 export default App;
