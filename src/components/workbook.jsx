@@ -11,14 +11,25 @@ class WorkBook extends Component {
     col: [],
     sheet: { 0: [""] },
     selectedFile: null,
+    selectedRow: null,
+    selectedCol: null,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     document
       .querySelector("td[contenteditable]")
       .addEventListener("paste", this.pasteDefaultStop);
     document.addEventListener("contextmenu", this.handleContextMenu);
     document.addEventListener("click", this.handleClick);
+    const data = {
+      fileDirectory: "workbook/Kelly/1611685812635-Book 1.xlsx",
+    };
+    let sheet = await axios.post(
+      "http://localhost:3030/file/retrieveFile",
+      data
+    );
+    this.setState({ sheet: sheet.data });
+    this.convertJsonToFile(this.state.sheet);
   }
 
   componentWillUnmount() {
@@ -47,7 +58,7 @@ class WorkBook extends Component {
   };
 
   highlightCell(cell) {
-    this.setState({ selectedCell: cell });
+    this.setState({ selectedCell: cell, selectedRow: null, selectedCol: null });
   }
 
   stopRightClickSelect = (e) => {
@@ -62,7 +73,6 @@ class WorkBook extends Component {
       let row = SheetValues[index];
       for (let f = 0; f < row.length; f++) {
         let id = alphabetSplit[f] + (index + 1);
-        console.log(id);
         document.getElementById(id).innerHTML = SheetValues[index][f];
       }
     }
@@ -79,7 +89,6 @@ class WorkBook extends Component {
       return parseInt(number) == index ? "selectedColHeader" : null;
     }
   }
-
   onKeyPressed(event) {
     const { sheet } = this.state;
     let value = document.getElementById(event).innerHTML.trim();
@@ -130,6 +139,15 @@ class WorkBook extends Component {
     }
   }
 
+  clickRow(index) {
+    this.setState({ selectedCell: "", selectedRow: index, selectedCol: "" });
+  }
+
+  clickCol(item) {
+    this.setState({ selectedCol: "" });
+    this.setState({ selectedCell: "", selectedRow: "", selectedCol: item });
+  }
+
   onChangeHandler = (event) => {
     this.setState({ selectedFile: event.target.files[0] });
     const data = new FormData();
@@ -142,24 +160,27 @@ class WorkBook extends Component {
   save() {
     const { sheet } = this.state;
     let data = Object.values(sheet);
-    this.convertJsonToFile(sheet);
+    axios.post("http://localhost:3030/saveFile", data).then((res) => {
+      console.log(res.statusText);
+    });
   }
 
   upload() {}
   render() {
     let colHeader = [];
     const alphabetSplit = alphabet.split("");
-    const { selectedCell } = this.state;
+    const { selectedCell, selectedRow, selectedCol } = this.state;
     const selected = selectedCell.split("");
 
     const { showMenu, xPos, yPos } = this.state;
 
     for (let index = 1; index < 200; index++) {
       colHeader.push(
-        <tr key={index}>
+        <tr key={index} className={index == selectedRow ? "selectedRow" : null}>
           <td
-            id="colHeader"
             className={this.highlightRowHeader(selected, index)}
+            id="colHeader"
+            onClick={() => this.clickRow(index)}
           >
             {index}
           </td>
@@ -198,6 +219,13 @@ class WorkBook extends Component {
           Upload
         </label>
         <table>
+          {selectedCol ? (
+            <colgroup>
+              <col span={alphabetSplit.indexOf(selectedCol) + 1} />
+              <col style={{ border: "3px solid#1d6f42" }}></col>{" "}
+            </colgroup>
+          ) : null}
+
           <thead>
             <tr>
               <th></th>
@@ -209,6 +237,7 @@ class WorkBook extends Component {
                     }
                     key={item}
                     id="rowHeader"
+                    onClick={() => this.clickCol(item)}
                   >
                     {item}
                   </th>

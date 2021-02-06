@@ -66,3 +66,6 @@ input[type="file"] {
   padding: 6px 12px;
   cursor: pointer;
 }
+.selectedRow {
+  border: 3px solid#1d6f42;
+}
